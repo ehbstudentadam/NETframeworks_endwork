@@ -1,0 +1,38 @@
+﻿@using ExamenAdam.Identity.Entities
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+    //var user = await UserManager.GetUserAsync(User);
+    //var claims = await UserManager.GetClaimsAsync(user);
+}
+
+<div class="text-center">
+    @*<h1 class="display-4">Welcome, @user.UserName</h1>*@
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@*<ul>
+    @foreach (var claim in User.Claims)
+    {
+        <li>
+            @claim.Type - @claim.Value
+        </li>
+    }
+</ul>
+
+@if (await UserManager.IsInRoleAsync(user, "Administrator"))
+{
+    <p>This user is an Administrator</p>
+}
+
+@if (await UserManager.IsInRoleAsync(user, "Beheerder"))
+{
+    <p>This user is an Beheerder</p>
+}
+
+@if (await UserManager.IsInRoleAsync(user, "Gebruiker"))
+{
+    <p>This user is an Gebruiker</p>
+}
+*@
