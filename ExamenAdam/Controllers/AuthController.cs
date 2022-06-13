@@ -9,11 +9,11 @@ namespace ExamenAdam.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<AuthController> _logger;
         public SignInManager<User> SignInManager { get; }
         public UserManager<User> UserManager { get; }
 
-        public AuthController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _logger = logger;
             SignInManager = signInManager;
@@ -24,14 +24,14 @@ namespace ExamenAdam.Controllers
         [HttpGet, AllowAnonymous]
         public IActionResult Login(string redirectUrl)
         {
-            return View(new SignInModel()
+            return View(new LogInModel()
             {
                 RedirectUrl = redirectUrl
             });
         }
 
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> Login(SignInModel model)
+        public async Task<IActionResult> Login(LogInModel model)
         {
             if (ModelState.IsValid is false)
             {
@@ -61,18 +61,24 @@ namespace ExamenAdam.Controllers
         }
 
         [HttpPost, AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Register(SignUpModel model)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid is false)
             {
                 return View(model);
             }
 
+            var address = model.Address;
+            if (address.PostalBus == null)
+            {
+                address.PostalBus = "/";
+            }
+
             var result = await UserManager.CreateAsync(new User
             {
                 Birthday = model.Birthday,
                 Sex = model.Sex,
-                Address = model.Address,
+                Address = address,
                 Email = model.Email,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber,
@@ -85,6 +91,7 @@ namespace ExamenAdam.Controllers
             {
                 return RedirectToAction(nameof(Login));
             }
+
             return View(model);
         }
 
@@ -95,7 +102,6 @@ namespace ExamenAdam.Controllers
 
             return Redirect("/");
         }
-
 
 
 

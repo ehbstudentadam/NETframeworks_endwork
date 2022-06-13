@@ -1,0 +1,29 @@
+﻿@model ManageUsersModel
+
+<div>
+    <table>
+      <tr>
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Emailaddress</th>
+        <th>Role</th>
+      </tr>
+        @foreach(var user in @Model.PendingUsers)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>
+                    <select name="Role" id="Role">
+                        <option value="@user.">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </td>
+            </tr>
+        }
+        
+    </table>
+</div>

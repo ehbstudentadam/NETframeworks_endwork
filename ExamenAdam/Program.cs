@@ -18,6 +18,9 @@ builder.Services.AddDbContext<ExamenAdamContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddScoped<PostRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<CommentRepository>();
 
 builder.Services.AddIdentity<User,Role>().AddEntityFrameworkStores<ExamenAdamContext>();
 
@@ -67,6 +70,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

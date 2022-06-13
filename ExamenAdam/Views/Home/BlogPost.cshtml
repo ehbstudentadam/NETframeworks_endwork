@@ -1,0 +1,36 @@
+﻿@model BlogPostModel
+
+<div style="display: flex; flex-direction: column; align-items:center; width: 80%">
+    <h1> @Model.Post.Title </h1>
+    <h4><i>Author: @Model.Post.User.UserName</i></h4>
+    <br />
+
+    <p>@Model.Post.Body</p>
+</div>
+<br />
+<br />
+<hr />
+<br />
+<br />
+<h4>Comments</h4>
+<br />
+<div style="display: flex; flex-direction: column">
+    <div>
+    @foreach(var comment in @Model.Post.Comments)
+    {
+        <ul style="border: 1px solid lightgrey; width: 80%; height: 100px; padding: 20px">
+            @comment.Commentary
+        </ul>
+    }
+    </div>
+    <br />
+    <h5>Write a comment:</h5>
+    <br />
+    <div>
+        <form asp-controller="Home" asp-action="CommentOnPost" asp-route-Id="@Model.Post.Id">
+        <input type=textbox asp-for="NewComment" style="border: 1px solid grey; width: 80%; height: 100px; padding: 10px"/>
+        <br /><br />
+        <button >create</button>
+        </form>
+    </div>
+</div>

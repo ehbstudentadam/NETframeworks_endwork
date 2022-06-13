@@ -7,9 +7,13 @@ namespace ExamenAdam.Data
 {
     public class ExamenAdamContext : IdentityDbContext<User, Role, long>
     {
-        public DbSet<Post> Posts { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
+        public DbSet<Post> Posts { get; set; } = null!;        
         public DbSet<Address> Address { get; set; } = null!;
+       /* public DbSet<Role> Roles { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;*/
+
+
 
         public ExamenAdamContext (DbContextOptions<ExamenAdamContext> options) : base(options)
         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExamenAdam.Identity.Models
 {
-    public class SignUpModel
+    public class RegisterModel
     {
         [Required]
         public DateTime Birthday { get; set; }
@@ -15,18 +15,15 @@ namespace ExamenAdam.Identity.Models
         public string FirstName { get; set; } = null!;
         [Required]
         public string LastName { get; set; } = null!;
+        [Phone]
         public string PhoneNumber { get; set; } = null!;
-        public bool Approved { get; set; } = false;
 
+        public bool Approved { get; set; } = false;
         [Required]
         public string UserName { get; set; } = null!;
-        [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
         [Required]
         public string Password { get; set; } = null!;
-
-
-
-
     }
 }

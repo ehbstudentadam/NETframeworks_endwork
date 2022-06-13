@@ -2,7 +2,7 @@
 
 namespace ExamenAdam.Identity.Models
 {
-    public class SignInModel
+    public class LogInModel
     {
         [Required]
         public string UserName { get; set; } = null!;

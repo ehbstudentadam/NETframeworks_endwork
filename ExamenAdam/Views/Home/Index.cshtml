@@ -1,38 +1,34 @@
 ﻿@using ExamenAdam.Identity.Entities
 @using Microsoft.AspNetCore.Identity
-@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+
 @{
     ViewData["Title"] = "Home Page";
-    //var user = await UserManager.GetUserAsync(User);
-    //var claims = await UserManager.GetClaimsAsync(user);
 }
 
 <div class="text-center">
-    @*<h1 class="display-4">Welcome, @user.UserName</h1>*@
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h1 class="display-4">Hello @User</h1>
+        <h1 class="display-4">Welcome to <br>KNOWLEDGE FAIR OF GRIMBERGEN</h1>
+    } else
+    {
+        <h1 class="display-4">Welcome to <br>KNOWLEDGE FAIR OF GRIMBERGEN</h1>
+    }    
 </div>
 
-@*<ul>
-    @foreach (var claim in User.Claims)
-    {
-        <li>
-            @claim.Type - @claim.Value
-        </li>
-    }
-</ul>
-
-@if (await UserManager.IsInRoleAsync(user, "Administrator"))
-{
-    <p>This user is an Administrator</p>
-}
-
-@if (await UserManager.IsInRoleAsync(user, "Beheerder"))
-{
-    <p>This user is an Beheerder</p>
-}
-
-@if (await UserManager.IsInRoleAsync(user, "Gebruiker"))
-{
-    <p>This user is an Gebruiker</p>
-}
-*@
+<div>
+    <h2>Objectives and working methods</h2>
+    <p>
+        Everyone retiring from their active working lives does this with a huge amount of knowledge and skills.
+        Knowledge fair of Grimbergen is created to exchange this knowledge. It's target is to pass on your knowledge to others and recive knowledge of others.
+        There will be lots of possibilities to socialize and opportunities to build new contacts after ending your proffesional activities.
+        Our motto is therefor: 
+        <br /> <i>Giving knowledge, taking Knowledge and making Acquaintances.</i> <br />
+        Not to mention the lectures, the activities are done in small groups, so that everyone can actively participate. 
+        Each group is led by an animator who convenes, guides and takes care of the facilities for the participants. 
+        The programme is largely up to the members themselves. 
+        The success therefore depends not only on the animators but also on the participants, who are expected to make an active contribution. 
+        If a group becomes too numerous, it is proceeded to split. In this way, one ensures that everyone is covered.
+    </p>
+</div>
