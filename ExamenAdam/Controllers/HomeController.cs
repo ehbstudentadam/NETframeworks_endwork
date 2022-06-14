@@ -16,8 +16,7 @@ namespace ExamenAdam.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly PostRepository _postRepository;
         private readonly CommentRepository _commentRepository;
-
-        public UserManager<User> UserManager { get; }
+        private UserManager<User> UserManager { get; }
 
         public HomeController(ILogger<HomeController> logger, PostRepository postRepository, CommentRepository commentRepository, UserManager<User> userManager)
         {
@@ -26,6 +25,8 @@ namespace ExamenAdam.Controllers
             _commentRepository = commentRepository;
             UserManager = userManager;
         }
+
+
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -49,11 +50,10 @@ namespace ExamenAdam.Controllers
                 return View();
             }
 
-            Dictionary<Post, string> postWithDescription = new Dictionary<Post, string>();
+            Dictionary<Post, string> postWithDescription = new();
 
             foreach ( Post post in latestBlogPosts)
-            {
-                
+            {                
                 string description = "" ;
                 var postBody = post.Body;
                 if (postBody.Length > 220)

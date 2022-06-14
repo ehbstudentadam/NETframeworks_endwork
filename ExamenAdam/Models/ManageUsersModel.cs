@@ -4,8 +4,11 @@ namespace ExamenAdam.Models
 {
     public class ManageUsersModel
     {
-        public List<User> SearchResultUsers { get; set; } = null!;
-        public List<User> PendingUsers { get; set; } = null!;
+        public Dictionary<User, Role> UnapprovedUsersAndRoles { get; set; } = null!;
+        public List<Role> AllRoles { get; set; } = null!;
+
+
+
 
 
 

@@ -1,29 +1,45 @@
-﻿@model ManageUsersModel
+﻿@using ExamenAdam.Identity.Entities
+@model ManageUsersModel
 
 <div>
-    <table>
-      <tr>
-        <th>Username</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Emailaddress</th>
-        <th>Role</th>
-      </tr>
-        @foreach(var user in @Model.PendingUsers)
-        {
-            <tr>
-                <td>@user.UserName</td>
-                <td>@user.FirstName</td>
-                <td>@user.LastName</td>
-                <td>@user.Email</td>
-                <td>
-                    <select name="Role" id="Role">
-                        <option value="@user.">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </td>
-            </tr>
-        }
-        
-    </table>
+    <form asp-controller="Management" asp-action="UpdateUsers">
+        <table>
+          <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Emailaddress</th>
+            <th>Role</th>
+            <th>Approved</th>
+          </tr>
+            @foreach(KeyValuePair<User, Role> kvp in @Model.UnapprovedUsersAndRoles)
+            {
+                <tr>
+                    <td>@kvp.Key.UserName</td>
+                    <td>@kvp.Key.FirstName</td>
+                    <td>@kvp.Key.LastName</td>
+                    <td>@kvp.Key.Email</td>
+                    <td>                        
+                        <select asp-for="@Model.????" name="Role" >
+                            <option selected value="@kvp.Value.Name">@kvp.Value.Name</option>
+                            @foreach(Role role in @Model.AllRoles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }                        
+                        </select>
+                    </td>
+                    <td>
+                        @if (@kvp.Key.Approved.Equals(true))
+                        {
+                            <input asp-for="@Model.???" type="checkbox" name="isApproved" checked="checked" value="true">
+                        } else
+                        {
+                            <input asp-for="@Model.???" type="checkbox" name="isApproved" value="true">
+                        }                    
+                    </td>
+                </tr>  
+            }        
+        </table>
+        <button>Save changes</button>
+    </form>
 </div>
