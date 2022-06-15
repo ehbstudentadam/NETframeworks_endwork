@@ -1,17 +1,23 @@
 ﻿@using ExamenAdam.Identity.Entities
 @model ManageUsersModel
 
+<h1 style="text-align: center">USERMANAGEMENT</h1>
+<br />
+
 <div>
-    <form asp-controller="Management" asp-action="UpdateUsers">
-        <table>
-          <tr>
-            <th>Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Emailaddress</th>
-            <th>Role</th>
-            <th>Approved</th>
-          </tr>
+    <h1>All NON-Approved users</h1>
+    <br />
+    <form asp-controller="Management" asp-action="ManageUsers">
+        <table style="width: 80%">
+            <tr>
+                <th style="width: 18%">Username</th>
+                <th style="width: 18%">First Name</th>
+                <th style="width: 18%">Last Name</th>
+                <th style="width: 18%">Emailaddress</th>
+                <th style="width: 10%">Role</th>
+                <th style="width: 10%">Approved</th>
+                <th style="width: 8%"></th>
+            </tr>
             @foreach(KeyValuePair<User, Role> kvp in @Model.UnapprovedUsersAndRoles)
             {
                 <tr>
@@ -19,27 +25,67 @@
                     <td>@kvp.Key.FirstName</td>
                     <td>@kvp.Key.LastName</td>
                     <td>@kvp.Key.Email</td>
-                    <td>                        
-                        <select asp-for="@Model.????" name="Role" >
-                            <option selected value="@kvp.Value.Name">@kvp.Value.Name</option>
-                            @foreach(Role role in @Model.AllRoles)
-                            {
-                                <option value="@role.Name">@role.Name</option>
-                            }                        
-                        </select>
-                    </td>
-                    <td>
-                        @if (@kvp.Key.Approved.Equals(true))
-                        {
-                            <input asp-for="@Model.???" type="checkbox" name="isApproved" checked="checked" value="true">
-                        } else
-                        {
-                            <input asp-for="@Model.???" type="checkbox" name="isApproved" value="true">
-                        }                    
-                    </td>
-                </tr>  
+                    <td>@kvp.Value.Name</td>
+                    <td>@kvp.Key.Approved</td>
+                    <td><a asp-controller="Management" asp-action="EditUserAndRole" asp-route-id="@kvp.Key.Id">EDIT</a></td>
+                </tr>
             }        
         </table>
-        <button>Save changes</button>
+        <br />
+        <input type="hidden" value="@Model.SearchFrom" asp-for="@Model.SearchFrom"/>
+        <input type="hidden" value="@Model.SearchTo" asp-for="@Model.SearchTo"/>
+        <p>Results @Model.SearchFrom - @Model.SearchTo</p>
+        <button type="submit" name="browse" value="previous">previous</button>
+        <button type="submit" name="browse" value="next">next</button>
+    </form>
+</div>
+
+<br /><br />
+
+<div>
+    <h1>Search specific user</h1>
+
+    <form asp-controller="Management" asp-action="ManageUsers">
+        <table style="width: 80%">
+            <tr>
+                <th style="width: 18%">Username</th>
+                <th style="width: 18%">First Name</th>
+                <th style="width: 18%">Last Name</th>
+                <th style="width: 18%">Emailaddress</th>
+                <th style="width: 10%">Role</th>
+                <th style="width: 10%">Approved</th>
+                <th style="width: 8%"></th>
+            </tr>
+            <tr>
+                <td ><input style="width: 90%" asp-for="@Model.UserName" /></td>
+                <td ><input style="width: 90%" asp-for="@Model.FirstName" /></td>
+                <td ><input style="width: 90%" asp-for="@Model.LastName" /></td>
+                <td ><input style="width: 90%" asp-for="@Model.Email" /></td>                
+                <td style="width: 10%"></td>
+                <td style="width: 10%"></td>
+                <td style="width: 8%"></td>
+            </tr>      
+        </table>
+        <br />
+        <h5>Result</h5>
+        <table style="width: 80%">
+            @if (@Model.UserResult != null)
+            {
+                @foreach(KeyValuePair<User, Role> kvp in @Model.UserResult)
+                {
+                    <tr>
+                        <td style="width: 18%">@kvp.Key.UserName</td>
+                        <td style="width: 18%">@kvp.Key.FirstName</td>
+                        <td style="width: 18%">@kvp.Key.LastName</td>
+                        <td style="width: 18%">@kvp.Key.Email</td>
+                        <td style="width: 10%">@kvp.Value.Name</td>
+                        <td style="width: 10%">@kvp.Key.Approved</td>
+                        <td style="width: 8%"><a asp-controller="Management" asp-action="EditUserAndRole" asp-route-id="@kvp.Key.Id">EDIT</a></td>
+                    </tr>
+                }
+            }
+        </table>
+        <br />
+        <button type="submit" name="browse" value="search">Search</button>
     </form>
 </div>

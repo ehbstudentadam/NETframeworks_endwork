@@ -91,7 +91,7 @@ using (var scope = app.Services.CreateScope())
             {
                 StreetName = "street",
                 StreetNumber = "01",
-                PostalBus = "",
+                PostalBus = "/",
                 PostalCode = "1000",
                 City = "city",
                 Country = "country"
@@ -112,7 +112,7 @@ using (var scope = app.Services.CreateScope())
             {
                 StreetName = "street",
                 StreetNumber = "02",
-                PostalBus = "",
+                PostalBus = "/",
                 PostalCode = "2000",
                 City = "city",
                 Country = "country"
@@ -133,7 +133,7 @@ using (var scope = app.Services.CreateScope())
             {
                 StreetName = "street",
                 StreetNumber = "03",
-                PostalBus = "",
+                PostalBus = "/",
                 PostalCode = "3000",
                 City = "city",
                 Country = "country"
@@ -154,7 +154,7 @@ using (var scope = app.Services.CreateScope())
             {
                 StreetName = "street",
                 StreetNumber = "04",
-                PostalBus = "",
+                PostalBus = "/",
                 PostalCode = "4000",
                 City = "city",
                 Country = "country"

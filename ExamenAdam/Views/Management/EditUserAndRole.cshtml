@@ -1,0 +1,39 @@
+﻿@using ExamenAdam.Identity.Entities
+@model EditUserAndRoleModel
+
+<div>
+    <h1 style="text-align: center">USER DETAILS</h1>
+    <br />
+    <form asp-controller="Management" asp-action="EditUserAndRole" asp-route-id="@Model.Id" >
+
+            
+            <h4>Username:</h4>
+            <h5>@Model.UserName</h5>
+            <br />
+            <h4>First & last name:</h4>
+            <h5>@Model.FirstName @Model.LastName</h5>
+            <br />
+            <h4>Email:</h4>
+            <h5>@Model.Email</h5>
+            <br />
+            <h5>User role:</h5>
+            <select asp-for="RoleEdit.Name">
+                <option selected value="@Model.RoleEdit.Name">@Model.RoleEdit.Name</option>
+                @foreach(Role role in @Model.AllRoles)
+                {
+                    <option value="@role.Name">@role.Name</option>
+                }                        
+            </select>
+            <br /><br />
+            <h5>Approved:</h5>
+            <select asp-for="@Model.Approved">
+                <option selected value="@Model.Approved">@Model.Approved</option>
+                <option value="true">true</option>
+                <option value="false">false</option>                   
+            </select>            
+            <br />
+            <br />
+            <button>Update!</button>
+    </form>
+
+</div>
