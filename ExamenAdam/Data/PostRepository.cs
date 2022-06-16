@@ -1,4 +1,5 @@
 ﻿using ExamenAdam.Entities;
+using ExamenAdam.Identity.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamenAdam.Data
@@ -26,6 +27,24 @@ namespace ExamenAdam.Data
             .OrderByDescending(entity => entity.Id)
             .Take(quantity)
             .ToList();
+
+        public IEnumerable<Post>? GetAllPoststFromUser(User user) => _context
+            .Set<Post>()
+            .Where(entity => entity.User == user)
+            .ToList();
+
+        public IEnumerable<Post>? GetAllPoststFromUserFromUntill(User user, int startIndex, int stopIndex) => _context
+            .Set<Post>()
+            .Where(entity => entity.User == user)
+            .Skip(startIndex)
+            .Take(stopIndex)
+            .ToList();
+
+        public void DeletePost(Post post)
+        {
+            _context.Set<Post>().Remove(post);
+            _context.SaveChanges();
+        }
 
     }
 }

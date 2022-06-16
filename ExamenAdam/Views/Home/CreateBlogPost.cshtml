@@ -1,16 +1,18 @@
 ﻿@model CreateBlogPostModel
 
+<h1 style="text-align:center">Write your own blog post here</h1>
+<br />
+<br />
 <form asp-controller="Home" asp-action="CreateBlogPost">
-
     <label for="Post.Title">Blog title:</label>
     <br />
-    <input asp-for="Post.Title" />
-    <span asp-validation-for="Post.Title"></span>
+    <input style="width: 100%;"  asp-for="@Model.Title" />
+    <span style="color:red" asp-validation-for="@Model.Title"></span>
     <br />
     <label for="Post.Body">Article:</label>
     <br />
-    <textarea asp-for="Post.Body"></textarea>
-    <span asp-validation-for="Post.Body"></span>
+    <textarea style="width: 100%;" rows="20" asp-for="@Model.Body"></textarea>
+    <span style="color:red" asp-validation-for="@Model.Body"></span>
     <br />
     <button>Post!</button>
 

@@ -33,17 +33,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">About us</a>
                         </li>
-                        
+
                         @if (SignInManager.IsSignedIn(User))
-                        {
-                            //@if (SignInManager.UserManager.GetRolesAsync(User).Equals("Mangager"))
-                            
+                        {                            
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Management" asp-action="ManageUsers">Management</a>
                             </li> 
-                                
-                            
-
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Settings">Account</a>
                             </li>  
@@ -60,7 +55,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>

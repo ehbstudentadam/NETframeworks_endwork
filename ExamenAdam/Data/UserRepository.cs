@@ -50,5 +50,11 @@ namespace ExamenAdam.Data
             _context.SaveChanges();
         }
 
+        public void DeleteUser(User user)
+        {
+            _context.Set<User>().Remove(user);
+            _context.SaveChanges();
+        }
+
     }
 }

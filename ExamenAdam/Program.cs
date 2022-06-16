@@ -244,10 +244,10 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    foreach (var claim in claims)
+/*    foreach (var claim in claims)
     {
 
-    }
+    }*/
 
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username1"), "Administrator");
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username2"), "Manager");

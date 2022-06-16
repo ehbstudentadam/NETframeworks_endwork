@@ -27,7 +27,7 @@ namespace ExamenAdam.Data
             modelBuilder.Entity<Comment>()
             .HasOne(c => c.Post)
             .WithMany(p => p.Comments)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

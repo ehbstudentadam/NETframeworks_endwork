@@ -267,5 +267,24 @@ namespace ExamenAdam.Controllers
         }
 
 
+
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var user = _userRepository.FindById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            //Remove roles
+            var roles = await UserManager.GetRolesAsync(user);
+            await UserManager.RemoveFromRolesAsync(user, roles);
+
+            _userRepository.DeleteUser(user);
+
+            return RedirectToAction(nameof(ManageUsers));
+        }
+
+
     }
 }

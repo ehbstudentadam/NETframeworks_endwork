@@ -4,7 +4,6 @@
     <h1> @Model.Post.Title </h1>
     <h4><i>Author: @Model.Post.User.UserName</i></h4>
     <br />
-
     <p>@Model.Post.Body</p>
 </div>
 <br />
@@ -20,6 +19,11 @@
     {
         <ul style="border: 1px solid lightgrey; width: 80%; height: 100px; padding: 20px">
             @comment.Commentary
+            <li style="list-style:none">~ @comment.User.UserName</li>
+            @if (User.Identity.Name.Equals(comment.User.UserName))
+            {
+                <li style="list-style:none; text-align: right;"> <a style="text-decoration: none; color:lightslategrey;" asp-controller="Home" asp-action="DeleteComment" asp-route-idcomment="@comment.Id" asp-route-idpost="@Model.Post.Id">delete comment</a></li>
+            }
         </ul>
     }
     </div>
@@ -27,8 +31,9 @@
     <h5>Write a comment:</h5>
     <br />
     <div>
-        <form asp-controller="Home" asp-action="CommentOnPost" asp-route-Id="@Model.Post.Id">
-        <input type=textbox asp-for="NewComment" style="border: 1px solid grey; width: 80%; height: 100px; padding: 10px"/>
+        <form asp-controller="Home" asp-action="BlogPost" asp-route-Id="@Model.Post.Id">
+        <textarea asp-for="@Model.NewComment" style="border: 1px solid grey; width: 80%; height: 100px; padding: 10px"></textarea>
+        <span style="color:red" asp-validation-for="@Model.NewComment"></span>
         <br /><br />
         <button >create</button>
         </form>

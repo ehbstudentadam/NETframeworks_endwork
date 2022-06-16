@@ -10,11 +10,11 @@ namespace ExamenAdam.Data
             _context = context;
         }
 
-/*        public void AddNewComment(Post post, string comment)
+        public void DeleteComment(Comment comment)
         {
-            _context.Comments.Add(new Comment { Commentary = comment, Post = post });
+            _context.Set<Comment>().Remove(comment);
             _context.SaveChanges();
-        }*/
+        }
 
 
     }

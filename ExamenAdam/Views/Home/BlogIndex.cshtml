@@ -7,27 +7,34 @@
 @model BlogIndexModel
 @inject SignInManager<User> SignInManager
 
-
+<h1 style="text-align: center">BLOG GRIMBERGEN</h1>
+<br />
 <div style="display: flex; flex-direction:column; align-items:center">
-    @foreach (KeyValuePair<Post, string> kvp in @Model.PostWithDescription)
+    @if (@Model.PostWithDescription != null)
+    {
+        @foreach (KeyValuePair<Post, string> kvp in @Model.PostWithDescription)
         {
-            <ul style="font-size: 30px">
+            <ul style="font-size: 20px; text-align:center">
                 <a asp-controller="Home" asp-action="BlogPost" asp-route-id="@kvp.Key.Id">
-                    <h3>@kvp.Key.Title</h3>
-                    <h4><i>Author: @kvp.Key.User.UserName</i></h4>
+                    <h1>@kvp.Key.Title</h1>
+                    <h6><i>Author: @kvp.Key.User.UserName</i></h6>
                 </a>  
                 @kvp.Value
             </ul>
             <hr />
         }
+    } else
+    {
+        <h3>No posts yet availlable.</h3>
+    }
 </div>
 
 @if (SignInManager.IsSignedIn(User))
 {
     <div>
-        <br><br>
+        <br><br><br>
         <a asp-controller="Home" asp-action="CreateBlogPost">
-            <h3>Create a new blogpost</h3>        
+            <h4>Create a new blogpost</h4>        
         </a>
     </div>
 }

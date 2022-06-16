@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace ExamenAdam.Controllers
-{
-    [Authorize (Policy = Policies.Approved)]
+{    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -47,7 +46,7 @@ namespace ExamenAdam.Controllers
 
             if (latestBlogPosts == null)
             {
-                return View();
+                return NotFound();
             }
 
             Dictionary<Post, string> postWithDescription = new();
@@ -56,9 +55,9 @@ namespace ExamenAdam.Controllers
             {                
                 string description = "" ;
                 var postBody = post.Body;
-                if (postBody.Length > 220)
+                if (postBody.Length > 420)
                 {
-                    description = postBody.Substring(0, 200);
+                    description = postBody.Substring(0, 400);
                     description += " ...";
                 }
                 postWithDescription.Add(post, description);                
@@ -69,37 +68,32 @@ namespace ExamenAdam.Controllers
 
 
         [HttpGet]
-        public IActionResult BlogPost(BlogPostModel model, long id)
+        public IActionResult BlogPost(long id)
         {
-            /*if (ModelState.IsValid is false)
-            {
-                return View(model);
-            }*/
-
             var post = _postRepository.FindById(id);
             if (post == null)
             {
                 return NotFound();
             }
-
-            model.Post = post;
-/*            model.PostId = id;
-            model.PostTitle = post.Title;
-            model.PostBody = post.Body;
-            model.Comments = post.Comments;*/
-
+            BlogPostModel model = new()
+            {
+                Post = post,
+                NewComment = "..."
+            };
 
             return View(model);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> CommentOnPostAsync(BlogPostModel model, long id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BlogPost(BlogPostModel model, long id)
         {
-            /*if (ModelState.IsValid is false)
+            if (ModelState.IsValid is false)
             {
-                return View(model);
-            }*/
+                return RedirectToAction(nameof(BlogPost), new { id });
+            }
+
             var user = await UserManager.GetUserAsync(User);
             var post = _postRepository.FindById(id);
 
@@ -108,15 +102,13 @@ namespace ExamenAdam.Controllers
                 return NotFound();
             }
 
-            string newCommentString = model.NewComment + $"<br><i>{post.User.UserName}</i>";
+            string newCommentString = model.NewComment;
 
             Comment newComment = new() { Commentary = newCommentString, Post = post, User = user };
 
             _commentRepository.AddEntity(newComment);
 
-            //_commentRepository.AddNewComment(post, newCommentString);
-
-            return RedirectToAction(nameof(BlogPost), new { id, model });
+            return RedirectToAction(nameof(BlogPost), new { id });
         }
 
 
@@ -130,22 +122,38 @@ namespace ExamenAdam.Controllers
         [HttpPost, AutoValidateAntiforgeryToken]
         public async Task<IActionResult> CreateBlogPost(CreateBlogPostModel model)
         {
-            /*if (ModelState.IsValid is false)
+            if (ModelState.IsValid is false)
             {
                 return View(model);
-            }*/
+            }
 
             var user = await UserManager.GetUserAsync(User);
 
-            Post post = model.Post;
-            post.User = user;
+            Post post = new()
+            {
+                Title = model.Title,
+                Body = model.Body,
+                User = user
+            };
 
             _postRepository.AddEntity(post);
 
             return RedirectToAction(nameof(BlogIndex));
         }
 
-        
+
+        public ActionResult DeleteComment(long idcomment, long idpost)
+        {
+            var comment = _commentRepository.FindById(idcomment);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            _commentRepository.DeleteComment(comment);
+
+            return RedirectToAction(nameof(BlogPost), new {id = idpost});
+        }
 
 
 

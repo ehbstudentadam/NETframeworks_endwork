@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model AccountSettingsModel
+
+
+
+<div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <h1 style="text-align:center">ACCOUNTSETTINGS</h1>
+    <br />
+    <h2>All posts from @User.Identity.Name</h2>
+    <br />
+        @if (@Model.Posts != null)
+        {
+            @foreach( var post in @Model.Posts)
+            {
+                <ul>
+                    <a asp-controller="Home" asp-action="BlogPost" asp-route-id="@post.Id"><h3>@post.Title</h3></a>
+                    <form asp-controller="Account" asp-action="DeletePost" asp-route-id="@post.Id" id="deletepost">
+                    <button type="submit">Delete post</button>
+                    </form>
+                </ul>
+            }
+            <script type="text/javascript">
+                $("body").on("submit", "#deletepost", function () {
+                    return confirm("Are you sure you want to delete post?");
+                });
+            </script>
+        }
+        <br />
+    <form asp-controller="Account" asp-action="Settings"> 
+        <input type="hidden" value="@Model.SearchFrom" asp-for="@Model.SearchFrom"/>
+        <input type="hidden" value="@Model.SearchTo" asp-for="@Model.SearchTo"/>
+        <p>Results @Model.SearchFrom - @Model.SearchTo</p>
+        <button type="submit" name="browse" value="previous">previous</button>
+        <button type="submit" name="browse" value="next">next</button>
+    </form>
+    <br />
+    <br />
+    <br />
+    <h2>Delete account</h2>
+    <br />
+    <form asp-controller="Account" asp-action="DeleteAccount" asp-route-id="@Model.AccountId" id="deleteform">
+    <button type="submit">Delete user</button>
+    </form>
+
+    <script type="text/javascript">
+        $("body").on("submit", "#deleteform", function () {
+            return confirm("Are you sure you want to delete current user?");
+        });
+    </script>
+</div>
+
