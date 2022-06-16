@@ -1,10 +1,12 @@
 ﻿using ExamenAdam.Entities;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace ExamenAdam.Identity.Models
 {
     public class RegisterModel
     {
+        public List<string>? Errors { get; set; }
         [Required]
         public DateTime Birthday { get; set; }
         [Required]

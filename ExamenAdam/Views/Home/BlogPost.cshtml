@@ -22,7 +22,10 @@
             <li style="list-style:none">~ @comment.User.UserName</li>
             @if (User.Identity.Name.Equals(comment.User.UserName))
             {
-                <li style="list-style:none; text-align: right;"> <a style="text-decoration: none; color:lightslategrey;" asp-controller="Home" asp-action="DeleteComment" asp-route-idcomment="@comment.Id" asp-route-idpost="@Model.Post.Id">delete comment</a></li>
+                <li style="list-style:none; text-align: right;"> 
+                    <a style="text-decoration: none; color:lightslategrey;" asp-controller="Home" asp-action="DeleteComment" asp-route-idcomment="@comment.Id" asp-route-idpost="@Model.Post.Id">delete comment</a>
+                    @*<a style="text-decoration: none; color:lightslategrey;" href="@Url.Action("DeleteComment", "Home", new {idcomment = comment.Id, idpost = @Model.Post.Id})">delete comment</a>*@
+                    </li>
             }
         </ul>
     }

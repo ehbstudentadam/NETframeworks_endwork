@@ -28,11 +28,6 @@ namespace ExamenAdam.Data
             .Take(quantity)
             .ToList();
 
-        public IEnumerable<Post>? GetAllPoststFromUser(User user) => _context
-            .Set<Post>()
-            .Where(entity => entity.User == user)
-            .ToList();
-
         public IEnumerable<Post>? GetAllPoststFromUserFromUntill(User user, int startIndex, int stopIndex) => _context
             .Set<Post>()
             .Where(entity => entity.User == user)

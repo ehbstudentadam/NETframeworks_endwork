@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
 builder.Services.AddDbContext<ExamenAdamContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
@@ -22,11 +24,9 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<CommentRepository>();
 
-builder.Services.AddIdentity<User,Role>().AddEntityFrameworkStores<ExamenAdamContext>();
-
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Can-Manage-Activity", policy =>
+/*    options.AddPolicy("Can-Manage-Activity", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("Activity", "Manage");
@@ -35,18 +35,24 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("Activity", "Read", "Manage");
-    });
+    });*/
+    
+    
     options.AddPolicy(Policies.Approved, policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireRole("Administrator", "Manager", "User");
-        policy.AddRequirements(new MustBeApproved());
+        policy.Requirements.Add(new MustBeApproved());
     });
 
-    //options.DefaultPolicy = options.GetPolicy("Approved");
+    //options.DefaultPolicy = options.GetPolicy("Approved")!;
 });
 
 builder.Services.AddScoped<IAuthorizationHandler, MustBeApprovedHandler>();
+builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ExamenAdamContext>();
+//builder.Services.Configure<IdentityOptions>(options => options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
+
+
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -69,12 +75,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -193,9 +201,9 @@ using (var scope = app.Services.CreateScope())
         }
     };
 
-    var claims = new Dictionary<string, Claim[]>
+/*    var claims = new Dictionary<string, Claim[]>
     {
-        { 
+        {
             "Administrator",
             new Claim[]
             {
@@ -205,7 +213,7 @@ using (var scope = app.Services.CreateScope())
                 new Claim("Activity", "Read")
             }
         }
-    };
+    };*/
 
 
     foreach (var user in users)
@@ -222,38 +230,45 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    foreach (var role in roles)
+/*    foreach (var role in roles)
     {
         if (await roleManager.FindByNameAsync(role.Name) is null)
         {
             var result = await roleManager.CreateAsync(role);
 
-            if (result.Succeeded is false)  
+            if (result.Succeeded is false)
             {
                 throw new Exception($"Failed to add role {role.Name}");
             }
 
             if (claims.ContainsKey(role.Name))
             {
-                var bdRole = await roleManager.FindByNameAsync(role.Name);
+                var dbRole = await roleManager.FindByNameAsync(role.Name);
                 foreach (var claim in claims[role.Name])
                 {
-                    await roleManager.AddClaimAsync(await roleManager.FindByNameAsync(role.Name), claim);
+                    await roleManager.AddClaimAsync(dbRole, claim);
                 }
             }
         }
-    }
-
-/*    foreach (var claim in claims)
-    {
-
     }*/
+
+    foreach (var role in roles)
+    {
+        if (await roleManager.FindByNameAsync(role.Name) is null)
+        {
+            var result = await roleManager.CreateAsync(role);
+
+            if (result.Succeeded is false)
+            {
+                throw new Exception($"Failed to add role {role.Name}");
+            }
+        }
+    }
 
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username1"), "Administrator");
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username2"), "Manager");
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username3"), "User");
     await userManager.AddToRoleAsync(await userManager.FindByNameAsync("username4"), "Pending");
-
 
 }
 

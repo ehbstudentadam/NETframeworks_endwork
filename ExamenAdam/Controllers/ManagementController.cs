@@ -1,24 +1,26 @@
 ﻿using ExamenAdam.Data;
 using ExamenAdam.Identity.Entities;
 using ExamenAdam.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExamenAdam.Controllers
 {
+    [Authorize(Roles = "Administrator, Manager")]
     public class ManagementController : Controller
     {
         private readonly ILogger<ManagementController> _logger;
         private readonly UserRepository _userRepository;
         private readonly RoleRepository _roleRepository;
-        private UserManager<User> UserManager { get; }
+        private UserManager<User> _userManager;
 
         public ManagementController(ILogger<ManagementController> logger, RoleRepository roleRepository, UserRepository userRepository, UserManager<User> userManager)
         {
             _logger = logger;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
-            UserManager = userManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -35,7 +37,7 @@ namespace ExamenAdam.Controllers
 
             foreach (var user1 in unApprovedUsers)
             {
-                var roles1 = await UserManager.GetRolesAsync(user1);
+                var roles1 = await _userManager.GetRolesAsync(user1);
 
                 Role? role1 = _roleRepository.FindByName(roles1.First());
                 if (role1 == null)
@@ -112,7 +114,7 @@ namespace ExamenAdam.Controllers
 
             foreach (var user1 in unApprovedUsers)
             {
-                var roles1 = await UserManager.GetRolesAsync(user1);
+                var roles1 = await _userManager.GetRolesAsync(user1);
 
                 Role? role1 = _roleRepository.FindByName(roles1.First());
                 if (role1 == null)
@@ -180,7 +182,7 @@ namespace ExamenAdam.Controllers
                 return View(model);
             }
 
-            var roles = await UserManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
             Role? role = _roleRepository.FindByName(roles.First());
             if (role == null)
             {
@@ -216,7 +218,7 @@ namespace ExamenAdam.Controllers
                 return NotFound();
             }
 
-            var roles = await UserManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
             Role? role = _roleRepository.FindByName(roles.First());
             if (role == null)
             {
@@ -258,10 +260,10 @@ namespace ExamenAdam.Controllers
             _userRepository.UpdateUser(user);
 
             //Remove old roles
-            var roles = await UserManager.GetRolesAsync(user);
-            await UserManager.RemoveFromRolesAsync(user, roles);
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
             //Add to new role
-            await UserManager.AddToRoleAsync(user, model.RoleEdit.Name);
+            await _userManager.AddToRoleAsync(user, model.RoleEdit.Name);
 
             return RedirectToAction(nameof(ManageUsers));
         }
@@ -277,8 +279,8 @@ namespace ExamenAdam.Controllers
             }
 
             //Remove roles
-            var roles = await UserManager.GetRolesAsync(user);
-            await UserManager.RemoveFromRolesAsync(user, roles);
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
 
             _userRepository.DeleteUser(user);
 

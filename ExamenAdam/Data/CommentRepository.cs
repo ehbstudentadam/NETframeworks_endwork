@@ -16,6 +16,5 @@ namespace ExamenAdam.Data
             _context.SaveChanges();
         }
 
-
     }
 }

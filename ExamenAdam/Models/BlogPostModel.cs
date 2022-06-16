@@ -6,7 +6,7 @@ namespace ExamenAdam.Models
 {
     public class BlogPostModel
     {
-        [Required, MinLength(15)]
+        [Required, MinLength(10)]
         public string NewComment { get; set; } = null!;
         public Post? Post { get; set; }        
 

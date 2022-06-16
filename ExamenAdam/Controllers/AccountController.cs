@@ -1,5 +1,6 @@
 ﻿using ExamenAdam.Data;
 using ExamenAdam.Entities;
+using ExamenAdam.Identity;
 using ExamenAdam.Identity.Entities;
 using ExamenAdam.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -8,30 +9,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExamenAdam.Controllers
 {
-
+    [Authorize(Policy = Policies.Approved)]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
         private readonly UserRepository _userRepository;
         private readonly PostRepository _postRepository;
-        private UserManager<User> UserManager { get; }
-        public SignInManager<User> SignInManager { get; }
+        private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
+
 
         public AccountController(ILogger<AccountController> logger, UserRepository userRepository, PostRepository postRepository, UserManager<User> usermanager, SignInManager<User> signInManager)
         {
             _logger = logger;
             _userRepository = userRepository;
             _postRepository = postRepository;
-            UserManager = usermanager;
-            SignInManager = signInManager;
+            _userManager = usermanager;
+            _signInManager = signInManager;
         }
-
 
 
         [HttpGet]
         public async Task<IActionResult> Settings()
         {
-            var user = await UserManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             var postFromUser = _postRepository.GetAllPoststFromUserFromUntill(user, 0, 10);
 
             if (postFromUser == null)
@@ -53,7 +54,6 @@ namespace ExamenAdam.Controllers
 
 
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Settings(AccountSettingsModel model, string browse)
@@ -63,7 +63,7 @@ namespace ExamenAdam.Controllers
                 return RedirectToAction(nameof(Settings));
             }
 
-            var user = await UserManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
 
             var from = Convert.ToInt32(model.SearchFrom);
             var untill = Convert.ToInt32(model.SearchTo);
@@ -110,6 +110,8 @@ namespace ExamenAdam.Controllers
         }
 
 
+
+        [ValidateAntiForgeryToken]
         public IActionResult DeletePost(long id)
         {
             var post = _postRepository.FindById(id);
@@ -125,7 +127,7 @@ namespace ExamenAdam.Controllers
 
 
 
-
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteAccount(long id)
         {
             var user = _userRepository.FindById(id);
@@ -135,12 +137,12 @@ namespace ExamenAdam.Controllers
             }
 
             //Remove roles
-            var roles = await UserManager.GetRolesAsync(user);
-            await UserManager.RemoveFromRolesAsync(user, roles);
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
 
             _userRepository.DeleteUser(user);
 
-            await SignInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             return Redirect("/");
         }

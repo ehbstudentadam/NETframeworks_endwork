@@ -1,4 +1,5 @@
-﻿using ExamenAdam.Identity.Entities;
+﻿using ExamenAdam.Data;
+using ExamenAdam.Identity.Entities;
 using ExamenAdam.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,18 +11,20 @@ namespace ExamenAdam.Controllers
     public class AuthController : Controller
     {
         private readonly ILogger<AuthController> _logger;
-        public SignInManager<User> SignInManager { get; }
-        public UserManager<User> UserManager { get; }
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
+
+
 
         public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _logger = logger;
-            SignInManager = signInManager;
-            UserManager = userManager;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
 
-        [HttpGet, AllowAnonymous]
+        [HttpGet]
         public IActionResult Login(string redirectUrl)
         {
             return View(new LogInModel()
@@ -30,7 +33,9 @@ namespace ExamenAdam.Controllers
             });
         }
 
-        [HttpPost, AllowAnonymous]
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LogInModel model)
         {
             if (ModelState.IsValid is false)
@@ -38,29 +43,31 @@ namespace ExamenAdam.Controllers
                 return View(model);
             }
 
-            var user = await UserManager.FindByNameAsync(model.UserName);
+            var user = await _userManager.FindByNameAsync(model.UserName);
             if (user is null)
             {
-                // TODO: login failure message.
                 return View(model);
             }
 
-            var result = await SignInManager.PasswordSignInAsync(user, model.Password, isPersistent: true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 return Redirect(model.RedirectUrl ?? "/");
             }
 
-            // TODO: sign in failure.
             return View(model);
         }
 
+
+        [HttpGet]
         public IActionResult Register()
-        {
-            return View();
+        {            
+            return View(new RegisterModel());
         }
 
-        [HttpPost, AutoValidateAntiforgeryToken]
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid is false)
@@ -74,7 +81,8 @@ namespace ExamenAdam.Controllers
                 address.PostalBus = "/";
             }
 
-            var result = await UserManager.CreateAsync(new User
+
+            var result = await _userManager.CreateAsync(new User
             {
                 Birthday = model.Birthday,
                 Sex = model.Sex,
@@ -89,22 +97,32 @@ namespace ExamenAdam.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(await _userManager.FindByNameAsync(model.UserName), "Pending");
                 return RedirectToAction(nameof(Login));
             }
+
+            var x = result.Errors.ToList();
+            List<string> errors = new();
+            foreach (var item in x)
+            {
+                errors.Add(item.Description);
+            }
+            model.Errors = errors;
 
             return View(model);
         }
 
 
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await SignInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             return Redirect("/");
         }
 
 
-
+        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();

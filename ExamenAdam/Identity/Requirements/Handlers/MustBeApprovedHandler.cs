@@ -6,16 +6,17 @@ namespace ExamenAdam.Identity.Requirements.Handlers
 {
     public class MustBeApprovedHandler : AuthorizationHandler<MustBeApproved>
     {
-        public UserManager<User> UserManager { get; } 
+        private UserManager<User> _userManager;
 
         public MustBeApprovedHandler(UserManager<User> userManager)
         {
-            UserManager = userManager;
+            _userManager = userManager;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, MustBeApproved requirement)
         {
-            var user = await UserManager.GetUserAsync(context.User);
+
+            var user = await _userManager.GetUserAsync(context.User);
 
             if (user == null)
             {

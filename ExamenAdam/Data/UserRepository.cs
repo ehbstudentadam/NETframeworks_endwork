@@ -1,4 +1,5 @@
-﻿using ExamenAdam.Identity.Entities;
+﻿using ExamenAdam.Entities;
+using ExamenAdam.Identity.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamenAdam.Data
@@ -43,6 +44,11 @@ namespace ExamenAdam.Data
             .Skip(startIndex)
             .Take(stopIndex)
             .ToList();
+
+        public User? GetUserForComment(Comment comment) => _context
+            .Set<User>()
+            .Where(entity => entity.Comments.Contains(comment))
+            .FirstOrDefault();
 
         public void UpdateUser(User user)
         {

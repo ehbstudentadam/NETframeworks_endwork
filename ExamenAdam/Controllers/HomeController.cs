@@ -9,30 +9,36 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace ExamenAdam.Controllers
-{    
+{
+    [Authorize(Policy = Policies.Approved)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly PostRepository _postRepository;
         private readonly CommentRepository _commentRepository;
-        private UserManager<User> UserManager { get; }
+        private readonly UserRepository _userRepository;
+        private UserManager<User> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, PostRepository postRepository, CommentRepository commentRepository, UserManager<User> userManager)
+        public HomeController(ILogger<HomeController> logger, PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository, UserManager<User> userManager)
         {
             _logger = logger;
             _postRepository = postRepository;
             _commentRepository = commentRepository;
-            UserManager = userManager;
+            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
 
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult AboutUs()
         {
             return View();
@@ -66,7 +72,6 @@ namespace ExamenAdam.Controllers
             return View(new BlogIndexModel { PostWithDescription = postWithDescription });
         }
 
-
         [HttpGet]
         public IActionResult BlogPost(long id)
         {
@@ -75,6 +80,14 @@ namespace ExamenAdam.Controllers
             {
                 return NotFound();
             }
+
+            foreach (var comment in post.Comments)
+            {
+                var user = _userRepository.GetUserForComment(comment);
+                if (user == null) { continue; }
+                comment.User.UserName = user.UserName;
+            }
+
             BlogPostModel model = new()
             {
                 Post = post,
@@ -94,7 +107,7 @@ namespace ExamenAdam.Controllers
                 return RedirectToAction(nameof(BlogPost), new { id });
             }
 
-            var user = await UserManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             var post = _postRepository.FindById(id);
 
             if (post == null)
@@ -112,7 +125,7 @@ namespace ExamenAdam.Controllers
         }
 
 
-        
+        [HttpGet]
         public IActionResult CreateBlogPost()
         {
             return View();
@@ -127,7 +140,7 @@ namespace ExamenAdam.Controllers
                 return View(model);
             }
 
-            var user = await UserManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
 
             Post post = new()
             {
@@ -141,7 +154,7 @@ namespace ExamenAdam.Controllers
             return RedirectToAction(nameof(BlogIndex));
         }
 
-
+        [AutoValidateAntiforgeryToken]
         public ActionResult DeleteComment(long idcomment, long idpost)
         {
             var comment = _commentRepository.FindById(idcomment);

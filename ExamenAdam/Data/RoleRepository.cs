@@ -1,4 +1,5 @@
 ﻿using ExamenAdam.Identity.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamenAdam.Data
 {
