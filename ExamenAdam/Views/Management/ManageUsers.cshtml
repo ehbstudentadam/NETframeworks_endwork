@@ -1,21 +1,23 @@
-﻿@using ExamenAdam.Identity.Entities
+﻿@inject IViewLocalizer Localizer
+@using ExamenAdam.Identity.Entities
+@using Microsoft.AspNetCore.Mvc.Localization
 @model ManageUsersModel
 
-<h1 style="text-align: center">USERMANAGEMENT</h1>
+<h1 style="text-align: center">@Localizer["USERMANAGEMENT"]</h1>
 <br />
 
 <div>
-    <h1>All NON-Approved users</h1>
+    <h1>@Localizer["All NON-Approved users"]</h1>
     <br />
     <form asp-controller="Management" asp-action="ManageUsers">
         <table style="width: 80%">
             <tr>
-                <th style="width: 18%">Username</th>
-                <th style="width: 18%">First Name</th>
-                <th style="width: 18%">Last Name</th>
-                <th style="width: 18%">Emailaddress</th>
-                <th style="width: 10%">Role</th>
-                <th style="width: 10%">Approved</th>
+                <th style="width: 18%">@Localizer["Username"]</th>
+                <th style="width: 18%">@Localizer["First Name"]</th>
+                <th style="width: 18%">@Localizer["Last Name"]</th>
+                <th style="width: 18%">@Localizer["Emailaddress"]</th>
+                <th style="width: 10%">@Localizer["Role"]</th>
+                <th style="width: 10%">@Localizer["Approved"]</th>
                 <th style="width: 8%"></th>
             </tr>
             @foreach(KeyValuePair<User, Role> kvp in @Model.UnapprovedUsersAndRoles)
@@ -35,25 +37,25 @@
         <input type="hidden" value="@Model.SearchFrom" asp-for="@Model.SearchFrom"/>
         <input type="hidden" value="@Model.SearchTo" asp-for="@Model.SearchTo"/>
         <p>Results @Model.SearchFrom - @Model.SearchTo</p>
-        <button type="submit" name="browse" value="previous">previous</button>
-        <button type="submit" name="browse" value="next">next</button>
+        <button type="submit" name="browse" value="previous">@Localizer["previous"]</button>
+        <button type="submit" name="browse" value="next">@Localizer["next"]</button>
     </form>
 </div>
 
 <br /><br />
 
 <div>
-    <h1>Search specific user</h1>
+    <h1>@Localizer["Search specific user"]</h1>
 
     <form asp-controller="Management" asp-action="ManageUsers">
         <table style="width: 80%">
             <tr>
-                <th style="width: 18%">Username</th>
-                <th style="width: 18%">First Name</th>
-                <th style="width: 18%">Last Name</th>
-                <th style="width: 18%">Emailaddress</th>
-                <th style="width: 10%">Role</th>
-                <th style="width: 10%">Approved</th>
+                <th style="width: 18%">@Localizer["Username"]</th>
+                <th style="width: 18%">@Localizer["First Name"]</th>
+                <th style="width: 18%">@Localizer["Last Name"]</th>
+                <th style="width: 18%">@Localizer["Emailaddress"]</th>
+                <th style="width: 10%">@Localizer["Role"]</th>
+                <th style="width: 10%">@Localizer["Approved"]</th>
                 <th style="width: 8%"></th>
             </tr>
             <tr>
@@ -67,7 +69,7 @@
             </tr>      
         </table>
         <br />
-        <h5>Result</h5>
+        <h5>@Localizer["Result"]</h5>
         <table style="width: 80%">
             @if (@Model.UserResult != null)
             {
@@ -86,6 +88,6 @@
             }
         </table>
         <br />
-        <button type="submit" name="browse" value="search">Search</button>
+        <button type="submit" name="browse" value="search">@Localizer["Search"]</button>
     </form>
 </div>

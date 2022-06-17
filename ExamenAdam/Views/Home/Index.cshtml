@@ -1,6 +1,7 @@
 ﻿@using ExamenAdam.Identity.Entities
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<User> SignInManager
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = "Home Page";
@@ -8,19 +9,12 @@
 
 
 <div>
-    <h1 style="text-align:center" >Welcome to <br>KNOWLEDGE FAIR OF GRIMBERGEN</h1>
+    <h1 style="text-align:center" >@Localizer["Welcome to"] <br>@Localizer["KNOWLEDGE FAIR OF GRIMBERGEN"]</h1>
     <br /><br />
-    <h2>Objectives and working methods</h2>
+    <h2>@Localizer["Objectives and working methods"]</h2>
     <p>
-        Everyone retiring from their active working lives does this with a huge amount of knowledge and skills.
-        Knowledge fair of Grimbergen is created to exchange this knowledge. It's target is to pass on your knowledge to others and recive knowledge of others.
-        There will be lots of possibilities to socialize and opportunities to build new contacts after ending your proffesional activities.
-        Our motto is therefor: 
-        <br /> <i>Giving knowledge, taking Knowledge and making Acquaintances.</i> <br />
-        Not to mention the lectures, the activities are done in small groups, so that everyone can actively participate. 
-        Each group is led by an animator who convenes, guides and takes care of the facilities for the participants. 
-        The programme is largely up to the members themselves. 
-        The success therefore depends not only on the animators but also on the participants, who are expected to make an active contribution. 
-        If a group becomes too numerous, it is proceeded to split. In this way, one ensures that everyone is covered.
+        @Localizer["Everyone retiring from their active working lives does this with a huge amount of knowledge and skills. Knowledge fair of Grimbergen is created to exchange this knowledge. It's target is to pass on your knowledge to others and recive knowledge of others. There will be lots of possibilities to socialize and opportunities to build new contacts after ending your proffesional activities. Our motto is therefor:"]
+        <br /><br /> <i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Localizer["Giving knowledge, aquire Knowledge and making Acquaintances."]</i><br /> <br />
+        @Localizer["Not to mention the lectures, the activities are done in small groups, so that everyone can actively participate. Each group is led by an animator who convenes, guides and takes care of the facilities for the participants. The programme is largely up to the members themselves. The success therefore depends not only on the animators but also on the participants, who are expected to make an active contribution. If a group becomes too numerous, it is proceeded to split. In this way, one ensures that everyone is covered."]
     </p>
 </div>

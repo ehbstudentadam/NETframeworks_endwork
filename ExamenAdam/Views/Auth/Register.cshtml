@@ -1,7 +1,9 @@
-﻿@{
+﻿@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Register";
 }
 @using ExamenAdam.Identity.Models
+@using Microsoft.AspNetCore.Mvc.Localization
 @model RegisterModel
 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
@@ -15,7 +17,7 @@
 <br />
 <form asp-action="Register">
 
-    <label for="Username">Username:</label>
+    <label for="Username">@Localizer["Username:"]</label>
     <input asp-for="UserName" />
     <br />
     <span asp-validation-for="UserName"></span>
@@ -25,45 +27,45 @@
     <br />
     <span asp-validation-for="Email"></span>
     <br />
-    <label for="Password">Password:</label>
+    <label for="Password">@Localizer["Password:"]</label>
     <input type="text" asp-for="Password" />
     <br />
     <span asp-validation-for="Password"></span>
     <br />
-    <label for="FirstName">First name:</label>
+    <label for="FirstName">@Localizer["First name:"]</label>
     <input asp-for="FirstName" />
     <br />
     <span asp-validation-for="FirstName"></span>
     <br />
-    <label for="LastName">Last name:</label>
+    <label for="LastName">@Localizer["Last name:"]</label>
     <input asp-for="LastName" />
     <br />
     <span asp-validation-for="LastName"></span>
     <br />
-    <label for="Birthdaty">Birthday:</label>
+    <label for="Birthdaty">@Localizer["Birthday:"]</label>
     <input type="date" asp-for="Birthday" />
     <br />
     <span asp-validation-for="Birthday"></span>
     <br />
-    <label for="PhoneNumber">Phone number:</label>
+    <label for="PhoneNumber">@Localizer["Phone number:"]</label>
     <input asp-for="PhoneNumber" />
     <br />
     <span asp-validation-for="PhoneNumber"></span>
     <br />
-    <label for="Sex">Sex:</label>
+    <label for="Sex">@Localizer["Sex:"]</label>
       <select name="Sex" id="Sex">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
+        <option value="male">@Localizer["Male"]</option>
+        <option value="female">@Localizer["Female"]</option>
       </select>
       <br />
     <span asp-validation-for="Sex"></span>
     <br />
-    <label for="Street">Street:</label>
+    <label for="Street">@Localizer["Street:"]</label>
     <input type="text" asp-for="Address.StreetName" />
     <br />
     <span asp-validation-for="Address.StreetName"></span>
     <br />
-    <label for="Number">number:</label>
+    <label for="Number">@Localizer["Number:"]</label>
     <input type="text" asp-for="Address.StreetNumber" />
     <br />
     <span asp-validation-for="Address.StreetNumber"></span>
@@ -72,20 +74,20 @@
     <input type="text" asp-for="Address.PostalBus" />
     <br />    
     <br />
-    <label for="PostalCode">Postal code:</label>
+    <label for="PostalCode">@Localizer["Postal code:"]</label>
     <input type="text" asp-for="Address.PostalCode" />
     <br />
     <span asp-validation-for="Address.PostalCode"></span>
     <br />
-    <label for="City">City:</label>
+    <label for="City">@Localizer["City:"]</label>
     <input type="text" asp-for="Address.City" />
     <br />
     <span asp-validation-for="Address.City"></span>
     <br />
-    <label for="Country">Country:</label>
+    <label for="Country">@Localizer["Country:"]</label>
     <input type="text" asp-for="Address.Country" />
     <br />
     <span asp-validation-for="Address.Country"></span>
     <br />
-    <button>Create new user</button>
+    <button>@Localizer["Create new user"]</button>
 </form>

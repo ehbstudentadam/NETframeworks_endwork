@@ -1,8 +1,10 @@
-﻿@model BlogPostModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model BlogPostModel
+@inject IViewLocalizer Localizer
 
 <div style="display: flex; flex-direction: column; align-items:center; width: 80%">
     <h1> @Model.Post.Title </h1>
-    <h4><i>Author: @Model.Post.User.UserName</i></h4>
+    <h4><i>@Localizer["Author:"] @Model.Post.User.UserName</i></h4>
     <br />
     <p>@Model.Post.Body</p>
 </div>
@@ -11,7 +13,7 @@
 <hr />
 <br />
 <br />
-<h4>Comments</h4>
+<h4>@Localizer["Comments"]</h4>
 <br />
 <div style="display: flex; flex-direction: column">
     <div>
@@ -31,14 +33,14 @@
     }
     </div>
     <br />
-    <h5>Write a comment:</h5>
+    <h5>@Localizer["Write a comment:"]</h5>
     <br />
     <div>
         <form asp-controller="Home" asp-action="BlogPost" asp-route-Id="@Model.Post.Id">
         <textarea asp-for="@Model.NewComment" style="border: 1px solid grey; width: 80%; height: 100px; padding: 10px"></textarea>
         <span style="color:red" asp-validation-for="@Model.NewComment"></span>
         <br /><br />
-        <button >create</button>
+        <button >@Localizer["create"]</button>
         </form>
     </div>
 </div>

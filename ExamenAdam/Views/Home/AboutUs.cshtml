@@ -1,12 +1,14 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "About Us";
 }
 
-<h1>Day-to-day management</h1>
+<h1>@Localizer["Day-to-day management"]</h1>
 
 
 <div>
-    <h3>President</h3>
+    <h3>@Localizer["President"]</h3>
     <p>
         Edwin Van Geert <br />
         De Merodestraat 13 <br />
@@ -16,7 +18,7 @@
 </div>
 
 <div>
-    <h3>Secritary</h3>
+    <h3>@Localizer["Secritary"]</h3>
     <p>
         Christiane Van Nieuwenhuysen <br />
         Poddegemstraat 12 <br />
@@ -26,7 +28,7 @@
 </div>
 
 <div>
-    <h3>Treasurer</h3>
+    <h3>@Localizer["Treasurer"]</h3>
     <p>
         Claudine Somers <br />
         Beigemsesteenweg 41 <br />

@@ -7,36 +7,35 @@ using ExamenAdam.Identity.Requirements.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews()
+    .AddMvcLocalization()
+    .AddDataAnnotationsLocalization();
+
+builder.Services.AddRequestLocalization(options =>
+{
+    options.AddSupportedUICultures("en-US", "nl");
+    options.AddSupportedUICultures("en-US", "nl");
+});
 
 
 builder.Services.AddDbContext<ExamenAdamContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
 builder.Services.AddScoped<PostRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<CommentRepository>();
 
 builder.Services.AddAuthorization(options =>
-{
-/*    options.AddPolicy("Can-Manage-Activity", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("Activity", "Manage");
-    });
-    options.AddPolicy("Can-View-Activity", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("Activity", "Read", "Manage");
-    });*/
-    
+{  
     
     options.AddPolicy(Policies.Approved, policy =>
     {
@@ -50,9 +49,6 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddScoped<IAuthorizationHandler, MustBeApprovedHandler>();
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<ExamenAdamContext>();
-//builder.Services.Configure<IdentityOptions>(options => options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
-
-
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -74,6 +70,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseRequestLocalization();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -82,7 +79,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 using (var scope = app.Services.CreateScope())
 {
@@ -201,20 +197,6 @@ using (var scope = app.Services.CreateScope())
         }
     };
 
-/*    var claims = new Dictionary<string, Claim[]>
-    {
-        {
-            "Administrator",
-            new Claim[]
-            {
-                new Claim("User", "Manage"),
-                new Claim("User", "Read"),
-                new Claim("Activity", "Manage"),
-                new Claim("Activity", "Read")
-            }
-        }
-    };*/
-
 
     foreach (var user in users)
     {
@@ -229,28 +211,6 @@ using (var scope = app.Services.CreateScope())
 
         }
     }
-
-/*    foreach (var role in roles)
-    {
-        if (await roleManager.FindByNameAsync(role.Name) is null)
-        {
-            var result = await roleManager.CreateAsync(role);
-
-            if (result.Succeeded is false)
-            {
-                throw new Exception($"Failed to add role {role.Name}");
-            }
-
-            if (claims.ContainsKey(role.Name))
-            {
-                var dbRole = await roleManager.FindByNameAsync(role.Name);
-                foreach (var claim in claims[role.Name])
-                {
-                    await roleManager.AddClaimAsync(dbRole, claim);
-                }
-            }
-        }
-    }*/
 
     foreach (var role in roles)
     {

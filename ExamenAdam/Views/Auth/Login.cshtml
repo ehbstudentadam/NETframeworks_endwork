@@ -1,16 +1,18 @@
-﻿@{
+﻿@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Log in";
 }
 @using ExamenAdam.Identity.Models
+@using Microsoft.AspNetCore.Mvc.Localization
 @model LogInModel
 
 <form asp-action="Login" >
     <input type="hidden" asp-for="RedirectUrl" />
-    <label for="UserName">Username:</label>
+    <label for="UserName">@Localizer["Username:"]</label>
     <input asp-for="UserName" />
     <span asp-validation-for="UserName"></span>
     <br /><br />    
-    <label for="Password">Password:</label>
+    <label for="Password">@Localizer["Password:"]</label>
     <input type="password" asp-for="Password" />
     <span asp-validation-for="Password"></span>
     <br /><br />

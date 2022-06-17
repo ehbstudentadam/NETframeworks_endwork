@@ -1,6 +1,8 @@
 ﻿@using ExamenAdam.Entities
 @using ExamenAdam.Identity.Entities
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Blog";
 }
@@ -17,7 +19,7 @@
             <ul style="font-size: 20px; text-align:center">
                 <a asp-controller="Home" asp-action="BlogPost" asp-route-id="@kvp.Key.Id">
                     <h1>@kvp.Key.Title</h1>
-                    <h6><i>Author: @kvp.Key.User.UserName</i></h6>
+                    <h6><i>@Localizer["Author:"] @kvp.Key.User.UserName</i></h6>
                 </a>  
                 @kvp.Value
             </ul>
@@ -25,7 +27,7 @@
         }
     } else
     {
-        <h3>No posts yet availlable.</h3>
+        <h3>@Localizer["No posts yet availlable."]</h3>
     }
 </div>
 
@@ -34,7 +36,7 @@
     <div>
         <br><br><br>
         <a asp-controller="Home" asp-action="CreateBlogPost">
-            <h4>Create a new blogpost</h4>        
+            <h4>@Localizer["Create a new blogpost"]</h4>        
         </a>
     </div>
 }
