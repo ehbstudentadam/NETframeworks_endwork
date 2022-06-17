@@ -19,7 +19,7 @@
     <div>
     @foreach(var comment in @Model.Post.Comments)
     {
-        <ul style="border: 1px solid lightgrey; width: 80%; height: 100px; padding: 20px">
+        <ul style="border: 1px solid lightgrey; width: 80%; height: 140px; padding: 20px">
             @comment.Commentary
             <li style="list-style:none">~ @comment.User.UserName</li>
             @if (User.Identity.Name.Equals(comment.User.UserName))

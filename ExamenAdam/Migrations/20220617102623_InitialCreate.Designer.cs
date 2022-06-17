@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExamenAdam.Migrations
 {
     [DbContext(typeof(ExamenAdamContext))]
-    [Migration("20220616131758_InitialCreate")]
+    [Migration("20220617102623_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,7 +343,7 @@ namespace ExamenAdam.Migrations
                     b.HasOne("ExamenAdam.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("ExamenAdam.Identity.Entities.User", "User")

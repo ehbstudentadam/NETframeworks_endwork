@@ -10,9 +10,6 @@ namespace ExamenAdam.Data
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Post> Posts { get; set; } = null!;        
         public DbSet<Address> Address { get; set; } = null!;
-       /* public DbSet<Role> Roles { get; set; } = null!;
-        public DbSet<User> Users { get; set; } = null!;*/
-
 
 
         public ExamenAdamContext (DbContextOptions<ExamenAdamContext> options) : base(options)
@@ -25,9 +22,15 @@ namespace ExamenAdam.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Comment>()
-            .HasOne(c => c.Post)
-            .WithMany(p => p.Comments)
-            .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Post>()
+                .HasMany(c => c.Comments)
+                .WithOne(p => p.Post)
+                .OnDelete(DeleteBehavior.ClientCascade);
+                                        //ClientNoAction
         }
     }
 }

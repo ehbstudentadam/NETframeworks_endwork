@@ -341,7 +341,7 @@ namespace ExamenAdam.Migrations
                     b.HasOne("ExamenAdam.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("ExamenAdam.Identity.Entities.User", "User")
